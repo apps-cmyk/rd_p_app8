@@ -1,132 +1,80 @@
-# IMDb Movie App
+# 🎬 IMDb Movie App
 
-Приложение для поиска и просмотра информации о фильмах и сериалах, использующее IMDb API.
+A sleek, Netflix-inspired mobile application for discovering movies and TV shows using the IMDb API.
 
-## Особенности
+![React Native](https://img.shields.io/badge/React_Native-0.79.2-61DAFB?logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?logo=typescript)
+![Platform](https://img.shields.io/badge/Platform-iOS%20%7C%20Android-lightgrey)
 
-- 🎬 **Топ-250 фильмов** - лучшие фильмы по рейтингу IMDb
-- 🔍 **Поиск** - поиск фильмов и сериалов с автодополнением
-- 📂 **Категории** - различные категории фильмов (популярные, рейтинговые, Box Office)
-- ⭐ **Избранное** - сохранение фильмов в личные списки
-- 🎭 **Детали фильма** - полная информация о фильме, актерах, режиссерах
-- 🌙 **Темная тема** - стиль Netflix с черным фоном и красными акцентами
+## ✨ Features
 
-## Технологии
+| Feature | Description |
+|---------|-------------|
+| **Top 250 Movies** | Browse the highest-rated movies on IMDb |
+| **Smart Search** | Find movies and TV shows with autocomplete |
+| **Categories** | Explore Popular, Top Rated, and Box Office hits |
+| **Favorites** | Save movies to your personal watchlist |
+| **Movie Details** | View full cast, crew, ratings, and plot info |
+| **Dark Theme** | Beautiful Netflix-style dark interface |
 
-- React Native
-- TypeScript
-- React Navigation
-- IMDb API (RapidAPI)
+## 🛠 Tech Stack
 
-## Установка и запуск
+- **Framework:** React Native 0.79.2
+- **Language:** TypeScript
+- **Navigation:** React Navigation 7
+- **State Management:** Zustand
+- **HTTP Client:** Axios
+- **Storage:** AsyncStorage
 
-### Предварительные требования
-
-- Node.js (версия 16 или выше)
-- React Native CLI
-- Android Studio (для Android)
-- Xcode (для iOS)
-
-### Установка зависимостей
+### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/apps-cmyk/app_rd_13_p_1.git
+
+# Navigate to project
+cd app_rd_13_p_1
+
+# Install dependencies
 npm install
+
+# Install iOS pods
+cd ios && pod install && cd ..
 ```
 
-### Запуск на Android
+### Running the App
 
 ```bash
-npx react-native run-android
+# Start Metro bundler
+npm start
+
+# Run on iOS
+npm run ios
+
+# Run on Android
+npm run android
 ```
 
-### Запуск на iOS
-
-```bash
-npx react-native run-ios
-```
-
-### Запуск Metro Bundler
-
-```bash
-npx react-native start
-```
-
-## Структура проекта
+## 📁 Project Structure
 
 ```
 src/
-├── components/          # Переиспользуемые компоненты
-│   ├── MovieCard.tsx   # Карточка фильма
-│   ├── SearchBar.tsx   # Поисковая строка
-│   ├── RatingStars.tsx # Рейтинг со звездами
-│   └── CategoryCard.tsx # Карточка категории
-├── screens/            # Экраны приложения
-│   ├── HomeScreen.tsx  # Главная страница
-│   ├── SearchScreen.tsx # Поиск
-│   ├── CategoriesScreen.tsx # Категории
-│   ├── FavoritesScreen.tsx # Избранное
-│   └── MovieDetailsScreen.tsx # Детали фильма
-├── navigation/         # Навигация
-│   ├── TabNavigator.tsx # Таб навигация
-│   └── StackNavigator.tsx # Стек навигация
-├── services/          # API сервисы
-│   └── imdbApi.ts     # IMDb API клиент
-├── hooks/            # React хуки
-│   ├── useMovies.ts  # Хук для работы с фильмами
-│   ├── useSearch.ts  # Хук для поиска
-│   └── useMovieDetails.ts # Хук для деталей фильма
-├── types/            # TypeScript типы
-│   ├── movie.ts      # Типы для фильмов
-│   └── navigation.ts # Типы для навигации
-└── theme/            # Тема приложения
-    ├── colors.ts     # Цвета
-    ├── typography.ts # Типографика
-    └── spacing.ts    # Отступы
+├── components/     # Reusable UI components
+├── screens/        # App screens (12 screens)
+├── navigation/     # Tab & Stack navigators
+├── hooks/          # Custom React hooks
+├── services/       # API services
+├── storage/        # AsyncStorage utilities
+├── theme/          # Colors, typography, spacing
+├── types/          # TypeScript definitions
+└── utils/          # Helper functions
 ```
 
-## API
+## 🎨 Design System
 
-Приложение использует IMDb API через RapidAPI:
-
-- **Base URL**: `https://imdb236.p.rapidapi.com/api/imdb`
-- **API Key**: `636c9a41bfmsh2572ee98638b998p1bb352jsnf6f57f60e997`
-
-### Основные эндпоинты:
-
-- `GET /search` - поиск фильмов
-- `GET /top250` - топ-250 фильмов
-- `GET /mostPopular` - популярные фильмы
-- `GET /details/{id}` - детали фильма
-- `GET /cast/{id}` - актеры фильма
-
-## Цветовая схема
-
-- **Черный**: `#000000` - основной фон
-- **Серый**: `#2C2C2E` - карточки и элементы
-- **Белый**: `#FFFFFF` - текст
-- **Красный акцент**: `#E10101` - кнопки и акценты
-
-## Навигация
-
-Приложение использует комбинацию таб и стек навигации:
-
-- **Tab Navigator**: Главная, Поиск, Категории, Избранное
-- **Stack Navigator**: Детали фильма, Профиль персоны
-
-## Разработка
-
-### Добавление нового экрана
-
-1. Создайте компонент в `src/screens/`
-2. Добавьте типы в `src/types/navigation.ts`
-3. Зарегистрируйте экран в навигаторе
-
-### Добавление нового API эндпоинта
-
-1. Добавьте метод в `src/services/imdbApi.ts`
-2. Создайте хук в `src/hooks/` если необходимо
-3. Используйте в компонентах
-
-## Лицензия
-
-MIT
+| Color | Hex | Usage |
+|-------|-----|-------|
+| Background | `#000000` | Main background |
+| Surface | `#2C2C2E` | Cards & containers |
+| Primary | `#E10101` | Buttons & accents |
+| Text | `#FFFFFF` | Primary text |

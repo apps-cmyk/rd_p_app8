@@ -8,11 +8,11 @@ workflows:
     environment:
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: com.apps-cmyk.app-rd-13-p-1
+        bundle_identifier: com.noir.scarlet99
       vars:
         XCODE_WORKSPACE: "app_rd_13_p_1.xcworkspace"
         XCODE_SCHEME: "app_rd_13_p_1"
-        APP_STORE_APP_ID: 1234567890 # Replace with your App Store Connect App ID
+        APP_STORE_APP_ID: 6757937669
       node: 18
       xcode: latest
       cocoapods: default
