@@ -1,97 +1,132 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# IMDb Movie App
 
-# Getting Started
+Приложение для поиска и просмотра информации о фильмах и сериалах, использующее IMDb API.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## Особенности
 
-## Step 1: Start Metro
+- 🎬 **Топ-250 фильмов** - лучшие фильмы по рейтингу IMDb
+- 🔍 **Поиск** - поиск фильмов и сериалов с автодополнением
+- 📂 **Категории** - различные категории фильмов (популярные, рейтинговые, Box Office)
+- ⭐ **Избранное** - сохранение фильмов в личные списки
+- 🎭 **Детали фильма** - полная информация о фильме, актерах, режиссерах
+- 🌙 **Темная тема** - стиль Netflix с черным фоном и красными акцентами
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Технологии
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+- React Native
+- TypeScript
+- React Navigation
+- IMDb API (RapidAPI)
 
-```sh
-# Using npm
-npm start
+## Установка и запуск
 
-# OR using Yarn
-yarn start
+### Предварительные требования
+
+- Node.js (версия 16 или выше)
+- React Native CLI
+- Android Studio (для Android)
+- Xcode (для iOS)
+
+### Установка зависимостей
+
+```bash
+npm install
 ```
 
-## Step 2: Build and run your app
+### Запуск на Android
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
+```bash
+npx react-native run-android
 ```
 
-### iOS
+### Запуск на iOS
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
+```bash
+npx react-native run-ios
 ```
 
-Then, and every time you update your native dependencies, run:
+### Запуск Metro Bundler
 
-```sh
-bundle exec pod install
+```bash
+npx react-native start
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+## Структура проекта
 
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+```
+src/
+├── components/          # Переиспользуемые компоненты
+│   ├── MovieCard.tsx   # Карточка фильма
+│   ├── SearchBar.tsx   # Поисковая строка
+│   ├── RatingStars.tsx # Рейтинг со звездами
+│   └── CategoryCard.tsx # Карточка категории
+├── screens/            # Экраны приложения
+│   ├── HomeScreen.tsx  # Главная страница
+│   ├── SearchScreen.tsx # Поиск
+│   ├── CategoriesScreen.tsx # Категории
+│   ├── FavoritesScreen.tsx # Избранное
+│   └── MovieDetailsScreen.tsx # Детали фильма
+├── navigation/         # Навигация
+│   ├── TabNavigator.tsx # Таб навигация
+│   └── StackNavigator.tsx # Стек навигация
+├── services/          # API сервисы
+│   └── imdbApi.ts     # IMDb API клиент
+├── hooks/            # React хуки
+│   ├── useMovies.ts  # Хук для работы с фильмами
+│   ├── useSearch.ts  # Хук для поиска
+│   └── useMovieDetails.ts # Хук для деталей фильма
+├── types/            # TypeScript типы
+│   ├── movie.ts      # Типы для фильмов
+│   └── navigation.ts # Типы для навигации
+└── theme/            # Тема приложения
+    ├── colors.ts     # Цвета
+    ├── typography.ts # Типографика
+    └── spacing.ts    # Отступы
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+## API
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+Приложение использует IMDb API через RapidAPI:
 
-## Step 3: Modify your app
+- **Base URL**: `https://imdb236.p.rapidapi.com/api/imdb`
+- **API Key**: `636c9a41bfmsh2572ee98638b998p1bb352jsnf6f57f60e997`
 
-Now that you have successfully run the app, let's make changes!
+### Основные эндпоинты:
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+- `GET /search` - поиск фильмов
+- `GET /top250` - топ-250 фильмов
+- `GET /mostPopular` - популярные фильмы
+- `GET /details/{id}` - детали фильма
+- `GET /cast/{id}` - актеры фильма
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+## Цветовая схема
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+- **Черный**: `#000000` - основной фон
+- **Серый**: `#2C2C2E` - карточки и элементы
+- **Белый**: `#FFFFFF` - текст
+- **Красный акцент**: `#E10101` - кнопки и акценты
 
-## Congratulations! :tada:
+## Навигация
 
-You've successfully run and modified your React Native App. :partying_face:
+Приложение использует комбинацию таб и стек навигации:
 
-### Now what?
+- **Tab Navigator**: Главная, Поиск, Категории, Избранное
+- **Stack Navigator**: Детали фильма, Профиль персоны
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+## Разработка
 
-# Troubleshooting
+### Добавление нового экрана
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+1. Создайте компонент в `src/screens/`
+2. Добавьте типы в `src/types/navigation.ts`
+3. Зарегистрируйте экран в навигаторе
 
-# Learn More
+### Добавление нового API эндпоинта
 
-To learn more about React Native, take a look at the following resources:
+1. Добавьте метод в `src/services/imdbApi.ts`
+2. Создайте хук в `src/hooks/` если необходимо
+3. Используйте в компонентах
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+## Лицензия
+
+MIT

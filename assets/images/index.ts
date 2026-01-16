@@ -1,0 +1,15 @@
+export const images = {
+    STAR: require('./star.png'),
+    BOOKMARK_FILLED: require('./bookmark-filled.png'),
+    BOOKMARK_EMPTY: require('./bookmark-empty.png'),
+    ARROW_LEFT: require('./arrow-left.png'),
+    HOME: require('./home.png'),
+    SEARCH: require('./search.png'),
+    CATEGORIES: require('./categories.png'),
+    FAVORITES: require('./featured.png'),
+    PLACEHOLDER: require('./placeholder.png'),
+    ARROW_RIGHT_WIDE_LINE: require('./arrow-right-wide-line.png'),
+    BANNER: require('./banner.png'),
+    NO_POSTER: require('./no_poster.png'),
+    NO_AVATAR: require('./no_avatar.png'),
+};
