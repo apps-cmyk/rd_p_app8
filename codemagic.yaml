@@ -1,25 +1,30 @@
-workflows:
-  ios-workflow:
-    name: iOS Workflow
+# Definitions and workflows
+definitions:
+  common_scripts: &common_scripts
+    - name: Install npm dependencies
+      script: |
+        npm install
+
+  ios_environment: &ios_environment
+    ios_signing:
+      distribution_type: app_store
+      bundle_identifier: YOUR_BUNDLE_ID # Example: com.noir.scarlet99
+    vars:
+      XCODE_WORKSPACE: "YOUR_WORKSPACE_NAME.xcworkspace" # Example: "app_rd_13_p_1.xcworkspace"
+      XCODE_SCHEME: "YOUR_SCHEME_NAME" # Example: "app_rd_13_p_1"
+      APP_STORE_APP_ID: YOUR_APP_STORE_ID # Example: 6757937669
+      BUILD_ENV: production
+    node: 18
+    xcode: latest
+    cocoapods: default
+
+  ios_base: &ios_base
     max_build_duration: 120
-    instance_type: mac_mini_m2
+    instance_type: mac_mini_m4
     integrations:
-      app_store_connect: rd_app_13_p_1 app store connect api key
-    environment:
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: com.noir.scarlet99
-      vars:
-        XCODE_WORKSPACE: "app_rd_13_p_1.xcworkspace"
-        XCODE_SCHEME: "app_rd_13_p_1"
-        APP_STORE_APP_ID: 6757937669
-      node: 18
-      xcode: latest
-      cocoapods: default
+      app_store_connect: YOUR_APP_STORE_CONNECT_API_KEY_NAME
     scripts:
-      - name: Install npm dependencies
-        script: |
-          npm install
+      - *common_scripts
       - name: Install CocoaPods dependencies
         script: |
           cd ios && pod install
@@ -40,5 +45,84 @@ workflows:
     publishing:
       app_store_connect:
         auth: integration
-        submit_to_testflight: true
-        submit_to_app_store: false
+        submit_to_testflight: false
+        submit_to_app_store: true
+
+workflows:
+  # ----------------------------
+  # iOS White
+  # ----------------------------
+  ios_white:
+    <<: *ios_base
+    name: iOS White
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: ios-white
+          include: true
+    environment:
+      <<: *ios_environment
+      vars:
+        XCODE_WORKSPACE: "YOUR_WORKSPACE_NAME.xcworkspace" # Example: "app_rd_13_p_1.xcworkspace"
+        XCODE_SCHEME: "YOUR_SCHEME_NAME" # Example: "app_rd_13_p_1"
+        APP_STORE_APP_ID: YOUR_APP_STORE_ID # Example: 6757937669
+        BUILD_ENV: production
+        APP_FLAVOR: ios-white
+
+  # ----------------------------
+  # iOS Black
+  # ----------------------------
+  ios_black:
+    <<: *ios_base
+    name: iOS Black
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: ios-black
+          include: true
+    environment:
+      <<: *ios_environment
+      vars:
+        XCODE_WORKSPACE: "YOUR_WORKSPACE_NAME.xcworkspace" # Example: "app_rd_13_p_1.xcworkspace"
+        XCODE_SCHEME: "YOUR_SCHEME_NAME" # Example: "app_rd_13_p_1"
+        APP_STORE_APP_ID: YOUR_APP_STORE_ID # Example: 6757937669
+        BUILD_ENV: production
+        APP_FLAVOR: ios-black
+
+  # ----------------------------
+  # Android Black
+  # ----------------------------
+  android_black:
+    name: Android Black
+    max_build_duration: 120
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: android-black
+          include: true
+    environment:
+      android_signing:
+        - codemagic_keystore # Reference name from Codemagic dashboard
+      vars:
+        APP_FLAVOR: android-black
+        BUILD_ENV: production
+        PACKAGE_NAME: "com.noir.scarlet" # Example: com.your.app.package
+      node: 18
+      java: 17
+    scripts:
+      - *common_scripts
+      - name: Set Android SDK location
+        script: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/android/local.properties"
+      - name: Build Android Black
+        script: |
+          cd android
+          ./gradlew bundleRelease assembleRelease \
+            -PversionCode=$BUILD_NUMBER \
+            -PversionName=1.0.$BUILD_NUMBER
+    artifacts:
+      - android/app/build/outputs/**/*.apk
+      - android/app/build/outputs/**/*.aab
