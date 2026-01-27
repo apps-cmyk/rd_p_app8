@@ -280,7 +280,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.noir.scarlet99";
+				PRODUCT_BUNDLE_IDENTIFIER = com.noir.scarlet99;
 				PRODUCT_NAME = app_rd_13_p_1;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -316,7 +316,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.noir.scarlet99";
+				PRODUCT_BUNDLE_IDENTIFIER = com.noir.scarlet99;
 				PRODUCT_NAME = app_rd_13_p_1;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

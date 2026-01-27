@@ -8,11 +8,11 @@ definitions:
   ios_environment: &ios_environment
     ios_signing:
       distribution_type: app_store
-      bundle_identifier: YOUR_BUNDLE_ID # Example: com.noir.scarlet99
+      bundle_identifier: com.noir.scarlet99
     vars:
-      XCODE_WORKSPACE: "YOUR_WORKSPACE_NAME.xcworkspace" # Example: "app_rd_13_p_1.xcworkspace"
-      XCODE_SCHEME: "YOUR_SCHEME_NAME" # Example: "app_rd_13_p_1"
-      APP_STORE_APP_ID: YOUR_APP_STORE_ID # Example: 6757937669
+      XCODE_WORKSPACE: "app_rd_13_p_1.xcworkspace"
+      XCODE_SCHEME: "app_rd_13_p_1"
+      APP_STORE_APP_ID: 6757937669
       BUILD_ENV: production
     node: 18
     xcode: latest
@@ -22,7 +22,7 @@ definitions:
     max_build_duration: 120
     instance_type: mac_mini_m4
     integrations:
-      app_store_connect: YOUR_APP_STORE_CONNECT_API_KEY_NAME
+      app_store_connect: rd_app_13_p_1 app store connect api key
     scripts:
       - *common_scripts
       - name: Install CocoaPods dependencies
@@ -64,9 +64,9 @@ workflows:
     environment:
       <<: *ios_environment
       vars:
-        XCODE_WORKSPACE: "YOUR_WORKSPACE_NAME.xcworkspace" # Example: "app_rd_13_p_1.xcworkspace"
-        XCODE_SCHEME: "YOUR_SCHEME_NAME" # Example: "app_rd_13_p_1"
-        APP_STORE_APP_ID: YOUR_APP_STORE_ID # Example: 6757937669
+        XCODE_WORKSPACE: "app_rd_13_p_1.xcworkspace" # Example: "app_rd_13_p_1.xcworkspace"
+        XCODE_SCHEME: "app_rd_13_p_1" # Example: "app_rd_13_p_1"
+        APP_STORE_APP_ID: 6757937669 # Example: 6757937669
         BUILD_ENV: production
         APP_FLAVOR: ios-white
 
@@ -85,9 +85,9 @@ workflows:
     environment:
       <<: *ios_environment
       vars:
-        XCODE_WORKSPACE: "YOUR_WORKSPACE_NAME.xcworkspace" # Example: "app_rd_13_p_1.xcworkspace"
-        XCODE_SCHEME: "YOUR_SCHEME_NAME" # Example: "app_rd_13_p_1"
-        APP_STORE_APP_ID: YOUR_APP_STORE_ID # Example: 6757937669
+        XCODE_WORKSPACE: "app_rd_13_p_1.xcworkspace" # Example: "app_rd_13_p_1.xcworkspace"
+        XCODE_SCHEME: "app_rd_13_p_1" # Example: "app_rd_13_p_1"
+        APP_STORE_APP_ID: 6757937669 # Example: 6757937669
         BUILD_ENV: production
         APP_FLAVOR: ios-black
 
