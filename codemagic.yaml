@@ -22,7 +22,7 @@ definitions:
     max_build_duration: 120
     instance_type: mac_mini_m4
     integrations:
-      app_store_connect: rd_app_13_p_1 app store connect api key
+      app_store_connect: rd_p_app8
     scripts:
       - *common_scripts
       - name: Install CocoaPods dependencies
