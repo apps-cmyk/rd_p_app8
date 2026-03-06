@@ -9,7 +9,7 @@ import {
     Image,
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import axios from 'axios';
+
 import { theme } from '../theme';
 import { MovieCard } from '../components';
 import { useMovies } from '../hooks';

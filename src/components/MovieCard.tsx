@@ -103,7 +103,7 @@ export const MovieCard: React.FC<MovieCardProps> = ({ movie, onPress, showBookma
                     <Image
                         source={{
                             uri: posterUri,
-                            cache: 'force-cache'
+                            cache: 'default'
                         }}
                         style={styles.poster}
                         onLoad={() => {

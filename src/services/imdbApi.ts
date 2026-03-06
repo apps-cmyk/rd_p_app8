@@ -1,16 +1,9 @@
 import { Movie, Person, SearchResult } from '../types/movie';
-import axios from 'axios';
 import { processMovieGenres } from '../utils/genres';
-import { retryWithBackoff, isNetworkError } from '../utils/retryUtils';
+import { apiRequest, API_KEY, API_HOST, BASE_URL, DEFAULT_HEADERS } from './apiClient';
 
 class ImdbApiClient {
-    private baseUrl = 'https://imdb236.p.rapidapi.com';
-    private apiKey = '636c9a41bfmsh2572ee98638b998p1bb352jsnf6f57f60e997';
     private cache = new Map<string, any>();
-    private headers = {
-        'x-rapidapi-key': '636c9a41bfmsh2572ee98638b998p1bb352jsnf6f57f60e997',
-        'x-rapidapi-host': 'imdb236.p.rapidapi.com'
-    };
 
     private countryMap: { [key: string]: string } = {
         'AD': 'Andorra',
@@ -467,43 +460,13 @@ class ImdbApiClient {
             return this.cache.get(cacheKey);
         }
 
-        return retryWithBackoff(async () => {
-            const url = `${this.baseUrl}/api/imdb${endpoint}`;
-            const options = {
-                method: 'GET',
-                url: url,
-                headers: {
-                    'x-rapidapi-key': this.apiKey,
-                    'x-rapidapi-host': 'imdb236.p.rapidapi.com'
-                },
-                params: params,
-                timeout: 10000, // 10 seconds timeout
-            };
-
-            const response = await axios.request(options);
-
-            this.cache.set(cacheKey, response.data);
-            return response.data;
-        }, 3, 1000);
+        const data = await apiRequest(`${BASE_URL}/api/imdb${endpoint}`, params);
+        this.cache.set(cacheKey, data);
+        return data;
     }
 
     private async makeRequestWithoutCache(endpoint: string, params?: any): Promise<any> {
-        return retryWithBackoff(async () => {
-            const url = `${this.baseUrl}/api/imdb${endpoint}`;
-            const options = {
-                method: 'GET',
-                url: url,
-                headers: {
-                    'x-rapidapi-key': this.apiKey,
-                    'x-rapidapi-host': 'imdb236.p.rapidapi.com'
-                },
-                params: params,
-                timeout: 10000, // 10 seconds timeout
-            };
-
-            const response = await axios.request(options);
-            return response.data;
-        }, 3, 1000);
+        return apiRequest(`${BASE_URL}/api/imdb${endpoint}`, params);
     }
 
     async searchMovies(query: string): Promise<SearchResult> {
@@ -531,21 +494,16 @@ class ImdbApiClient {
         sortField?: string;
     }): Promise<SearchResult> {
         try {
-            const response = await axios.get('https://imdb236.p.rapidapi.com/api/imdb/search', {
-                params: {
-                    ...(params.query && { query: params.query }),
-                    ...(params.type && { type: params.type }),
-                    ...(params.genre && { genre: params.genre }),
-                    ...(params.country && { country: params.country }),
-                    rows: params.rows || 25,
-                    sortOrder: params.sortOrder || 'DESC',
-                    sortField: params.sortField || 'averageRating',
-                },
-                headers: this.headers,
-                timeout: 10000,
+            const data = await apiRequest(`${BASE_URL}/api/imdb/search`, {
+                ...(params.query && { query: params.query }),
+                ...(params.type && { type: params.type }),
+                ...(params.genre && { genre: params.genre }),
+                ...(params.country && { country: params.country }),
+                rows: params.rows || 25,
+                sortOrder: params.sortOrder || 'DESC',
+                sortField: params.sortField || 'averageRating',
             });
 
-            const data = response.data;
             const movies = Array.isArray(data) ? data : [];
 
             return {
@@ -556,7 +514,6 @@ class ImdbApiClient {
         } catch (error: any) {
             console.error('Advanced search error:', error);
 
-            // Check if it's a network error
             if (error.code === 'ECONNABORTED' || error.message === 'Network Error' || !error.response) {
                 const networkError = new Error('NETWORK_ERROR');
                 networkError.name = 'NetworkError';
@@ -573,13 +530,8 @@ class ImdbApiClient {
 
     async getAutocomplete(query: string): Promise<Array<{ id: string; title: string; year?: number; poster?: string }>> {
         try {
-            const response = await axios.get('https://imdb236.p.rapidapi.com/api/imdb/autocomplete', {
-                params: { query },
-                headers: this.headers,
-                timeout: 10000,
-            });
+            const data = await apiRequest(`${BASE_URL}/api/imdb/autocomplete`, { query });
 
-            const data = response.data;
             if (Array.isArray(data)) {
                 return data.map((item: any) => ({
                     id: item.id || '',
@@ -592,7 +544,6 @@ class ImdbApiClient {
         } catch (error: any) {
             console.error('Autocomplete error:', error);
 
-            // Check if it's a network error
             if (error.code === 'ECONNABORTED' || error.message === 'Network Error' || !error.response) {
                 const networkError = new Error('NETWORK_ERROR');
                 networkError.name = 'NetworkError';

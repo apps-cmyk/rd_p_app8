@@ -14,7 +14,7 @@ import {
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { StackNavigationProp } from '@react-navigation/stack';
-import axios from 'axios';
+import { apiRequest } from '../services/apiClient';
 import { theme } from '../theme';
 import { MovieCard } from '../components';
 import { useMovies } from '../hooks';
@@ -51,28 +51,23 @@ export const CategoriesScreen: React.FC<CategoriesScreenProps> = ({ navigation }
   const [lowestRatedError, setLowestRatedError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchTop250TvShows();
-    fetchMostPopularTvShows();
-    fetchLowestRatedMovies();
+    const fetchSequentially = async () => {
+      await fetchTop250TvShows();
+      await new Promise(resolve => setTimeout(resolve, 500));
+      await fetchMostPopularTvShows();
+      await new Promise(resolve => setTimeout(resolve, 500));
+      await fetchLowestRatedMovies();
+    };
+    fetchSequentially();
   }, []);
 
 
   const fetchTop250TvShows = async () => {
     try {
       setTvLoading(true);
-      const options = {
-        method: 'GET',
-        url: 'https://imdb236.p.rapidapi.com/api/imdb/top250-tv',
-        headers: {
-          'x-rapidapi-key': '636c9a41bfmsh2572ee98638b998p1bb352jsnf6f57f60e997',
-          'x-rapidapi-host': 'imdb236.p.rapidapi.com'
-        },
-        timeout: 15000
-      };
+      const data = await apiRequest('https://imdb236.p.rapidapi.com/api/imdb/top250-tv');
 
-      const response = await axios.request(options);
-
-      const transformedTvShows = response.data.map((show: any) => ({
+      const transformedTvShows = data.map((show: any) => ({
         id: show.id || '',
         title: show.primaryTitle || '',
         year: show.startYear || 0,
@@ -94,19 +89,9 @@ export const CategoriesScreen: React.FC<CategoriesScreenProps> = ({ navigation }
   const fetchMostPopularTvShows = async () => {
     try {
       setPopularTvLoading(true);
-      const options = {
-        method: 'GET',
-        url: 'https://imdb236.p.rapidapi.com/api/imdb/most-popular-tv',
-        headers: {
-          'x-rapidapi-key': '636c9a41bfmsh2572ee98638b998p1bb352jsnf6f57f60e997',
-          'x-rapidapi-host': 'imdb236.p.rapidapi.com'
-        },
-        timeout: 15000
-      };
+      const data = await apiRequest('https://imdb236.p.rapidapi.com/api/imdb/most-popular-tv');
 
-      const response = await axios.request(options);
-
-      const transformedPopularTvShows = response.data.map((show: any) => ({
+      const transformedPopularTvShows = data.map((show: any) => ({
         id: show.id || '',
         title: show.primaryTitle || '',
         year: show.startYear || 0,
@@ -136,18 +121,9 @@ export const CategoriesScreen: React.FC<CategoriesScreenProps> = ({ navigation }
   const fetchTop250Movies = async () => {
     try {
       setTop250Loading(true);
-      const options = {
-        method: 'GET',
-        url: 'https://imdb236.p.rapidapi.com/api/imdb/top250-movies',
-        headers: {
-          'x-rapidapi-key': '636c9a41bfmsh2572ee98638b998p1bb352jsnf6f57f60e997',
-          'x-rapidapi-host': 'imdb236.p.rapidapi.com'
-        }
-      };
+      const data = await apiRequest('https://imdb236.p.rapidapi.com/api/imdb/top250-movies');
 
-      const response = await axios.request(options);
-
-      const transformedTop250 = response.data.map((movie: any) => ({
+      const transformedTop250 = data.map((movie: any) => ({
         id: movie.id || '',
         title: movie.primaryTitle || '',
         year: movie.startYear || 0,
@@ -185,19 +161,9 @@ export const CategoriesScreen: React.FC<CategoriesScreenProps> = ({ navigation }
   const fetchLowestRatedMovies = async () => {
     try {
       setLowestRatedLoading(true);
-      const options = {
-        method: 'GET',
-        url: 'https://imdb236.p.rapidapi.com/api/imdb/lowest-rated-movies',
-        headers: {
-          'x-rapidapi-key': '636c9a41bfmsh2572ee98638b998p1bb352jsnf6f57f60e997',
-          'x-rapidapi-host': 'imdb236.p.rapidapi.com'
-        },
-        timeout: 15000
-      };
+      const data = await apiRequest('https://imdb236.p.rapidapi.com/api/imdb/lowest-rated-movies');
 
-      const response = await axios.request(options);
-
-      const transformedLowestRated = response.data.map((movie: any) => ({
+      const transformedLowestRated = data.map((movie: any) => ({
         id: movie.id || '',
         title: movie.primaryTitle || '',
         year: movie.startYear || 0,
@@ -269,7 +235,7 @@ export const CategoriesScreen: React.FC<CategoriesScreenProps> = ({ navigation }
                       <Image
                         source={{
                           uri: movie.poster,
-                          cache: 'force-cache'
+                          cache: 'default'
                         }}
                         style={styles.poster}
                         resizeMode="cover"
@@ -334,7 +300,7 @@ export const CategoriesScreen: React.FC<CategoriesScreenProps> = ({ navigation }
                       <Image
                         source={{
                           uri: tvShow.poster,
-                          cache: 'force-cache'
+                          cache: 'default'
                         }}
                         style={styles.poster}
                         resizeMode="cover"
@@ -399,7 +365,7 @@ export const CategoriesScreen: React.FC<CategoriesScreenProps> = ({ navigation }
                       <Image
                         source={{
                           uri: tvShow.poster,
-                          cache: 'force-cache'
+                          cache: 'default'
                         }}
                         style={styles.poster}
                         resizeMode="cover"
@@ -464,7 +430,7 @@ export const CategoriesScreen: React.FC<CategoriesScreenProps> = ({ navigation }
                       <Image
                         source={{
                           uri: movie.poster,
-                          cache: 'force-cache'
+                          cache: 'default'
                         }}
                         style={styles.poster}
                         resizeMode="cover"

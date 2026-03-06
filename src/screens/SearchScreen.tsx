@@ -18,7 +18,7 @@ import { Movie } from '../types/movie';
 import { RootStackParamList } from '../types/navigation';
 import { imdbApi } from '../services/imdbApi';
 import { processMovieGenres } from '../utils/genres';
-import axios from 'axios';
+import { apiRequest } from '../services/apiClient';
 import { images } from '../../assets/images';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -58,18 +58,9 @@ export const SearchScreen: React.FC<SearchScreenProps> = ({ navigation }) => {
   const fetchTopRatedMovies = async () => {
     try {
       setTopRatedLoading(true);
-      const options = {
-        method: 'GET',
-        url: 'https://imdb236.p.rapidapi.com/api/imdb/top-rated-english-movies',
-        headers: {
-          'x-rapidapi-key': '636c9a41bfmsh2572ee98638b998p1bb352jsnf6f57f60e997',
-          'x-rapidapi-host': 'imdb236.p.rapidapi.com'
-        }
-      };
+      const data = await apiRequest('https://imdb236.p.rapidapi.com/api/imdb/top-rated-english-movies');
 
-      const response = await axios.request(options);
-
-      const transformedMovies = response.data.map((movie: any) => ({
+      const transformedMovies = data.map((movie: any) => ({
         id: movie.id || '',
         title: movie.primaryTitle || '',
         year: movie.startYear || 0,

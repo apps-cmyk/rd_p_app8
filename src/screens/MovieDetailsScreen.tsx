@@ -14,7 +14,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import { BlurView } from '@react-native-community/blur';
 import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
-import axios from 'axios';
+import { apiRequest } from '../services/apiClient';
 import { theme } from '../theme';
 import { useMovieDetails } from '../hooks';
 import { RootStackParamList } from '../types/navigation';
@@ -86,18 +86,9 @@ export const MovieDetailsScreen: React.FC<MovieDetailsScreenProps> = ({
   const fetchSimilarMovies = async (movieId: string) => {
     try {
       setSimilarLoading(true);
-      const options = {
-        method: 'GET',
-        url: `https://imdb236.p.rapidapi.com/api/imdb/${movieId}/similar`,
-        headers: {
-          'x-rapidapi-key': '636c9a41bfmsh2572ee98638b998p1bb352jsnf6f57f60e997',
-          'x-rapidapi-host': 'imdb236.p.rapidapi.com'
-        }
-      };
+      const data = await apiRequest(`https://imdb236.p.rapidapi.com/api/imdb/${movieId}/similar`);
 
-      const response = await axios.request(options);
-
-      const transformedMovies = response.data.map((movie: any) => ({
+      const transformedMovies = data.map((movie: any) => ({
         id: movie.id || '',
         title: movie.primaryTitle || '',
         year: movie.startYear || 0,
@@ -322,7 +313,7 @@ export const MovieDetailsScreen: React.FC<MovieDetailsScreenProps> = ({
                           <Image
                             source={{
                               uri: similarMovie.poster,
-                              cache: 'force-cache'
+                              cache: 'default'
                             }}
                             style={styles.similarPoster}
                             resizeMode="cover"
@@ -377,7 +368,7 @@ export const MovieDetailsScreen: React.FC<MovieDetailsScreenProps> = ({
                     <Image
                       source={{
                         uri: person.photo,
-                        cache: 'force-cache'
+                        cache: 'default'
                       }}
                       style={styles.personImage}
                       resizeMode="cover"
@@ -413,7 +404,7 @@ export const MovieDetailsScreen: React.FC<MovieDetailsScreenProps> = ({
                     <Image
                       source={{
                         uri: director.photo,
-                        cache: 'force-cache'
+                        cache: 'default'
                       }}
                       style={styles.personImage}
                       resizeMode="cover"
@@ -449,7 +440,7 @@ export const MovieDetailsScreen: React.FC<MovieDetailsScreenProps> = ({
                     <Image
                       source={{
                         uri: writer.photo,
-                        cache: 'force-cache'
+                        cache: 'default'
                       }}
                       style={styles.personImage}
                       resizeMode="cover"
@@ -485,7 +476,7 @@ export const MovieDetailsScreen: React.FC<MovieDetailsScreenProps> = ({
                     <Image
                       source={{
                         uri: person.photo,
-                        cache: 'force-cache'
+                        cache: 'default'
                       }}
                       style={styles.personImage}
                       resizeMode="cover"

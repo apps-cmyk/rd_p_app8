@@ -9,7 +9,7 @@ import {
     Image,
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import axios from 'axios';
+import { apiRequest } from '../services/apiClient';
 import { theme } from '../theme';
 import { MovieCard } from '../components';
 import { Movie } from '../types/movie';
@@ -36,18 +36,9 @@ export const PopularTvShowsScreen: React.FC<PopularTvShowsScreenProps> = ({ navi
     const fetchPopularTvShows = async () => {
         try {
             setLoading(true);
-            const options = {
-                method: 'GET',
-                url: 'https://imdb236.p.rapidapi.com/api/imdb/most-popular-tv',
-                headers: {
-                    'x-rapidapi-key': '636c9a41bfmsh2572ee98638b998p1bb352jsnf6f57f60e997',
-                    'x-rapidapi-host': 'imdb236.p.rapidapi.com'
-                }
-            };
+            const data = await apiRequest('https://imdb236.p.rapidapi.com/api/imdb/most-popular-tv');
 
-            const response = await axios.request(options);
-
-            const transformedTvShows = response.data.map((show: any) => ({
+            const transformedTvShows = data.map((show: any) => ({
                 id: show.id || '',
                 title: show.primaryTitle || '',
                 year: show.startYear || 0,
